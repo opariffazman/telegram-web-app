@@ -191,11 +191,13 @@
       <small>(The window goes fullscreen)</small>
       <button onclick="toggleMainButton(this);">Hide Main Button</button>
       <small>(It hides/shows main button)</small>
-      <button id="btnTime" onclick="sendTime(10);">Send time</button>
-      <small>(The bot will recieve a message with filled <code>web_app_data</code> field)</small>
+      <button onclick="toggleHapticFeedback(this);">Hide Main Button</button>
+      <small>Success Haptic</small>
+      <!-- <button id="btnTime" onclick="sendTime(10);">Send time</button>
+      <small>(The bot will recieve a message with filled <code>web_app_data</code> field)</small> -->
     </div>
 
-    <h3>Test links</h3>
+    <!-- <h3>Test links</h3>
     <ul>
       <li><a href="?nextpage=1">Regular link #1</a> (opens inside webview)</li>
       <li><a href="https://telegram.org/" target="_blank">target="_blank" link</a> (opens outside webview)</li>
@@ -224,7 +226,7 @@
     <h3>Init Data: </h3>
     <pre id="initData"></pre>
     <h3>Init Data (unsafe): </h3>
-    <pre id="initDataUnsafe"></pre>
+    <pre id="initDataUnsafe"></pre> -->
   </section>
 
   <script type="application/javascript">
@@ -256,6 +258,10 @@
         mainButton.show();
         el.innerHTML = 'Hide Main Button';
       }
+    }
+
+    function toggleHapticFeedback(el) {
+      notificationOccurred(success);
     }
 
     function webviewExpand() {
