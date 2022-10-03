@@ -37,7 +37,7 @@
 
     button {
       display: block;
-      width: 100%;
+      width: 50%;
       font-size: 14px;
       margin: 15px 0;
       padding: 12px 20px;
@@ -191,10 +191,13 @@
       <small>(The window goes fullscreen)</small>
       <button onclick="toggleMainButton(this);">Hide Main Button</button>
       <small>(It hides/shows main button)</small>
-      <button onclick="toggleHapticFeedback(this);">Hide Main Button</button>
-      <small>Success Haptic</small>
       <!-- <button id="btnTime" onclick="sendTime(10);">Send time</button>
       <small>(The bot will recieve a message with filled <code>web_app_data</code> field)</small> -->
+    </div>
+
+    <div id="buttons">
+      <button onclick="toggleHapticFeedback();">Send Success Haptic</button>
+      <small>Success Haptic</small>
     </div>
 
     <!-- <h3>Test links</h3>
@@ -260,8 +263,9 @@
       }
     }
 
-    function toggleHapticFeedback(el) {
-      notificationOccurred(success);
+    function toggleHapticFeedback() {
+      const hapticButton = Telegram.WebApp.HapticFeedback;
+      hapticButton.notificationOccurred(success);
     }
 
     function webviewExpand() {
