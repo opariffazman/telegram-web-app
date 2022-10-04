@@ -36,8 +36,8 @@
     }
 
     button {
-      display: block;
-      width: 50%;
+      display: flex;
+      width: 100%;
       font-size: 14px;
       margin: 15px 0;
       padding: 12px 20px;
@@ -90,6 +90,7 @@
     }
 
     pre {
+      font-family: sans-serif;
       background: rgba(0, 0, 0, .07);
       border-radius: 4px;
       padding: 4px;
@@ -178,6 +179,10 @@
       font-size: 12px;
     }
 
+    .container {
+      display: none;
+    }
+
   </style>
 </head>
 
@@ -187,49 +192,51 @@
     <h1 id="greeting"></h1>
 
     <div id="buttons">
-      <button onclick="webviewExpand();">Expand Webview</button>
-      <small>(The window goes fullscreen)</small>
-      <button onclick="toggleMainButton(this);">Hide Main Button</button>
-      <small>(It hides/shows main button)</small>
-      <!-- <button id="btnTime" onclick="sendTime(10);">Send time</button>
-      <small>(The bot will recieve a message with filled <code>web_app_data</code> field)</small> -->
+      <!-- <button onclick="webviewExpand();">Expand Webview</button>
+      <button onclick="toggleMainButton(this);">Hide Main Button</button> -->
+      <button onclick="toggleElement('pakejA');">Pakej A</button>
+      <div class="container" id="pakejA">
+        <pre>
+          Pakej A(Rm30)
+          🎀Skema pemarkahan matematik SPM
+
+          📌📌📌📌📌📌📌📌📌
+          Pakej A1(Rm30)
+          Slide
+          _Skema pemarkahan mate tambahan kertas 1(DWI)
+          Soalan SPM K1 2021_
+
+
+          Pakej A2(Rm30)
+          Slide
+          Skema pemarkahan mate tambahan kertas 2(DWI)
+          _Soalan SPM K2 2021_
+          📌📌📌📌📌📌📌📌📌📌
+        </pre>
+      </div>
+
+      <button onclick="toggleElement('pakejB');">Pakej B</button>
+      <div class="container" id="pakejB">
+        <pre>
+          Pakej B (Rm25)
+          F3 KSSM matematik
+          📍Garis lurus
+                penyelesaian soalan n pemarkahan (dwibahasa)
+          📍Trigonometry
+          🌟Percuma🌟
+          ☂Lokus
+          ☂Ulangkaji
+              ❤️No indeks
+              ❤️Perimeter Dan luas
+              ❤️Bentuk geometry
+              ❤️Bentangan bentuk 3D
+        </pre>
+      </div>
     </div>
 
-    <div id="buttons">
-      <button onclick="toggleHapticFeedback();">Send Success Haptic</button>
-      <small>Success Haptic</small>
-    </div>
 
-    <!-- <h3>Test links</h3>
-    <ul>
-      <li><a href="?nextpage=1">Regular link #1</a> (opens inside webview)</li>
-      <li><a href="https://telegram.org/" target="_blank">target="_blank" link</a> (opens outside webview)</li>
-      <li><a href="javascript:window.open('https://telegram.org/');">window.open() link</a> (opens outside
-        webview)</li>
-      <li><a href="https://t.me/like">LikeBot t.me link</a> (opens inside Telegram app)</li>
-      <li><a href="tg://resolve?domain=vote">VoteBot tg:// link</a> (does not open)</li>
-    </ul>
 
-    <h3>Test permissions</h3>
-    <ul>
-      <li>
-        <a href="javascript:;" onclick="return requestLocation();">Request Location</a>
-        <span id="locationData"></span>
-      </li>
-      <li>
-        <a href="javascript:;" onclick="return requestVideo();">Request Video</a>
-        <span id="videoData"></span>
-      </li>
-      <li>
-        <a href="javascript:;" onclick="return requestAudio();">Request Audio</a>
-        <span id="audioData"></span>
-      </li>
-    </ul>
 
-    <h3>Init Data: </h3>
-    <pre id="initData"></pre>
-    <h3>Init Data (unsafe): </h3>
-    <pre id="initDataUnsafe"></pre> -->
   </section>
 
   <script type="application/javascript">
@@ -252,6 +259,11 @@
       document.querySelector('#themeData').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
     });
 
+    function toggleElement(el) {
+      const element = document.getElementById(el);
+      element.style.display === "" ? element.style.display = "block" : element.style.display = "";
+    }
+
     function toggleMainButton(el) {
       const mainButton = Telegram.WebApp.MainButton;
       if (mainButton.isVisible) {
@@ -261,11 +273,6 @@
         mainButton.show();
         el.innerHTML = 'Hide Main Button';
       }
-    }
-
-    function toggleHapticFeedback() {
-      const hapticButton = Telegram.WebApp.HapticFeedback;
-      hapticButton.notificationOccurred(success);
     }
 
     function webviewExpand() {
@@ -281,40 +288,6 @@
       for (let i = 0; i < repeat; i++) {
         Telegram.WebApp.sendData(new Date().toString());
       }
-    }
-
-    function requestLocation() {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-          document.querySelector('#locationData').innerHTML = '(' + position.coords.latitude + ', ' + position.coords.longitude + ')';
-        });
-      } else {
-        document.querySelector('#locationData').innerHTML = '(Geolocation is not supported in this browser)';
-      }
-
-      return false;
-    }
-
-    function requestVideo() {
-      if (navigator.mediaDevices) {
-        navigator.mediaDevices.getUserMedia({ audio: false, video: true }).then(function (stream) {
-          document.querySelector('#videoData').innerHTML = '(Access granted)';
-        });
-      } else {
-        document.querySelector('#videoData').innerHTML = '(Media devices is not supported in this browser)';
-      }
-      return false;
-    }
-
-    function requestAudio() {
-      if (navigator.mediaDevices) {
-        navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then(function (stream) {
-          document.querySelector('#audioData').innerHTML = '(Access granted)';
-        });
-      } else {
-        document.querySelector('#audioData').innerHTML = '(Media devices is not supported in this browser)';
-      }
-      return false;
     }
   </script>
 </body>
