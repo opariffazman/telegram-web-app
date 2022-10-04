@@ -192,68 +192,57 @@
     <h1 id="greeting"></h1>
 
     <div id="buttons">
-      <!-- <button onclick="webviewExpand();">Expand Webview</button>
-      <button onclick="toggleMainButton(this);">Hide Main Button</button> -->
-      <button onclick="toggleElement('pakejA');">Pakej A</button>
-      <div class="container" id="pakejA">
-        <pre>
-          Pakej A(Rm30)
-          🎀Skema pemarkahan matematik SPM
 
-          📌📌📌📌📌📌📌📌📌
-          Pakej A1(Rm30)
-          Slide
-          _Skema pemarkahan mate tambahan kertas 1(DWI)
-          Soalan SPM K1 2021_
-
-
-          Pakej A2(Rm30)
-          Slide
-          Skema pemarkahan mate tambahan kertas 2(DWI)
-          _Soalan SPM K2 2021_
-          📌📌📌📌📌📌📌📌📌📌
-        </pre>
-      </div>
-
-      <button onclick="toggleElement('pakejB');">Pakej B</button>
-      <div class="container" id="pakejB">
-        <pre>
-          Pakej B (Rm25)
-          F3 KSSM matematik
-          📍Garis lurus
-                penyelesaian soalan n pemarkahan (dwibahasa)
-          📍Trigonometry
-          🌟Percuma🌟
-          ☂Lokus
-          ☂Ulangkaji
-              ❤️No indeks
-              ❤️Perimeter Dan luas
-              ❤️Bentuk geometry
-              ❤️Bentangan bentuk 3D
-        </pre>
-      </div>
     </div>
-
-
-
-
   </section>
 
   <script type="application/javascript">
     Telegram.WebApp.ready();
 
+    async function initializeSlides() {
+      let slides
+      const res = await fetch('https://slides.cyclic.app/api/listJson')
+      slides = await res.json()
+
+      let main = document.getElementById('buttons')
+
+      for (let index = 0; index < slides.length; index++) {
+        let slide = slides[index].Key
+
+        const res = await fetch(`https://slides.cyclic.app/api/files?name=${slide}`)
+        let packageInfo = await res.json()
+        let packageId = packageInfo['uid']
+        let packageTajuk = packageInfo['tajuk']
+        let packageTingkatan = packageInfo['tingkatan']
+        let packageSubjek = packageInfo['subjek']
+        let packageIsi = packageInfo['isi']
+        let packagePrice = packageInfo['price']
+        let packageUrl = packageInfo['url']
+        console.log(packageId, packageTajuk, packageTingkatan, packageIsi, packageSubjek, packagePrice, packageUrl)
+
+        let div = document.createElement("div")
+        div.innerHTML = `
+        <button onclick="toggleElement('${packageId}')">${packageTajuk}</button>
+        <div class="container" id="${packageId}">
+          <pre>
+            ${packageTajuk} Tingkatan: ${packageTingkatan}
+            Subjek: ${packageSubjek}
+            Isi Kandungan: ${packageIsi}
+            Harga (MYR): ${packagePrice}
+          </pre>
+        </div>
+        `
+        main.appendChild(div)
+      }
+    }
+
+    initializeSlides()
+
     const initData = Telegram.WebApp.initData || '';
     const initDataUnsafe = Telegram.WebApp.initDataUnsafe || {};
 
     document.querySelector('#greeting').innerHTML = `Hi, ${initDataUnsafe.user.first_name}!`;
-    document.querySelector('#initData').innerHTML = JSON.stringify(initData, null, 2);
-    document.querySelector('#initDataUnsafe').innerHTML = JSON.stringify(initDataUnsafe, null, 2);
     document.querySelector('#themeData').html(JSON.stringify(Telegram.WebApp.themeParams, null, 2));
-
-    Telegram.WebApp.MainButton
-      .setText('CLOSE WEBVIEW')
-      .show()
-      .onClick(function () { webviewClose(); });
 
     Telegram.WebApp.onEvent('themeChanged', function () {
       document.querySelector('#themeData').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
@@ -262,25 +251,6 @@
     function toggleElement(el) {
       const element = document.getElementById(el);
       element.style.display === "" ? element.style.display = "block" : element.style.display = "";
-    }
-
-    function toggleMainButton(el) {
-      const mainButton = Telegram.WebApp.MainButton;
-      if (mainButton.isVisible) {
-        mainButton.hide();
-        el.innerHTML = 'Show Main Button';
-      } else {
-        mainButton.show();
-        el.innerHTML = 'Hide Main Button';
-      }
-    }
-
-    function webviewExpand() {
-      Telegram.WebApp.expand();
-    }
-
-    function webviewClose() {
-      Telegram.WebApp.close();
     }
 
     function sendTime(spam) {
